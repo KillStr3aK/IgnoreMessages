@@ -5,7 +5,7 @@ This plugin can remove the messages from the chat. You can specify the message k
 By default I've supplied the configuration with random keys but mostly related to cash messages and it has the `PrintKeyNames` enabled.
 
 > [!NOTE]  
-> Required CSSharp version: 84
+> Required CSSharp version: **84**
 
 # Configuration
 

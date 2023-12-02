@@ -7,6 +7,8 @@ By default I've supplied the configuration with random keys but mostly related t
 > [!WARNING]  
 > When adding new message keys to the configuration dont forget the `#` in the beginning.
 
+Message keys are found in: ../game/csgo/resource/csgo_english.txt
+
 # Configuration
 
 ```jsonc

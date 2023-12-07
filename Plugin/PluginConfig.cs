@@ -8,6 +8,6 @@
 
         public HashSet<string> IgnoredMessages { get; set; } = new HashSet<string>();
 
-        public WIN_LINUX<string> PrintToChatSignature { get; set; } = new WIN_LINUX<string>(string.Empty, string.Empty);
+        public override int Version { get; set; } = 2;
     }
 }

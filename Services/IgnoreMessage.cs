@@ -2,6 +2,7 @@
 {
     using CounterStrikeSharp.API.Core;
     using CounterStrikeSharp.API.Core.Plugin;
+    using CounterStrikeSharp.API.Modules.Memory;
     using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
 
     public class IgnoreMessage
@@ -11,8 +12,6 @@
         private readonly PluginContext PluginContext;
 
         public required Plugin Plugin;
-
-        public required MemoryFunctionVoid<nint, long, string, nint, long, nint, long> PrintToChat;
 
         public IgnoreMessage(ILogger<IgnoreMessage> logger, PluginContext pluginContext)
         {
@@ -24,28 +23,42 @@
         {
             this.Plugin = (this.PluginContext.Plugin as Plugin)!;
 
-            this.PrintToChat = new(this.Plugin.Config.PrintToChatSignature.Get());
-            this.PrintToChat.Hook(this.OnPrintToChat, HookMode.Pre);
+            VirtualFunctions.ClientPrintFunc.Hook(this.OnPrintToChat, HookMode.Pre);
+            VirtualFunctions.ClientPrintAllFunc.Hook(this.OnPrintToChatAll, HookMode.Pre);
         }
 
-        private HookResult OnPrintToChat(DynamicHook hook)
+        private HookResult InternalHandler(string message)
         {
-            string message = hook.GetParam<string>(2);
-
-            if (this.Plugin.Config.IgnoredMessages.Contains(message))
-                return HookResult.Stop;
-
-            if (this.Plugin.Config.PrintKeyNames)
+            if (message.StartsWith("#"))
             {
-                this.Logger.LogInformation("Current message key: \"{0}\"", message);
+                if (this.Plugin.Config.IgnoredMessages.Contains(message))
+                {
+                    return HookResult.Stop;
+                }
+
+                if (this.Plugin.Config.PrintKeyNames)
+                {
+                    this.Logger.LogInformation("Current message key: \"{0}\"", message.Replace(Environment.NewLine, string.Empty));
+                }
             }
 
             return HookResult.Continue;
         }
 
+        private HookResult OnPrintToChat(DynamicHook hook)
+        {
+            return this.InternalHandler(hook.GetParam<string>(2));
+        }
+
+        private HookResult OnPrintToChatAll(DynamicHook hook)
+        {
+            return this.InternalHandler(hook.GetParam<string>(1));
+        }
+
         public void Release(bool hotReload)
         {
-            this.PrintToChat.Unhook(this.OnPrintToChat, HookMode.Pre);
+            VirtualFunctions.ClientPrintFunc.Unhook(this.OnPrintToChat, HookMode.Pre);
+            VirtualFunctions.ClientPrintAllFunc.Unhook(this.OnPrintToChatAll, HookMode.Pre);
         }
     }
 }

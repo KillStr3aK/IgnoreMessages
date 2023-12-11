@@ -19,9 +19,6 @@ Message keys are found in: `../game/csgo/resource/csgo_english.txt`
 {
   // if this is enabled, the plugin will print and log every message key name for you just in case you'd want to block it, just dont know the name of it. (should be disabled in production, only prints to console)
   "PrintKeyNames": true,
-  "PrintToChatSignature": {
-    // ....
-  },
   "IgnoredMessages": [
     // each key must begin with '#'
     "#Player_Cash_Award_Bomb_Planted",

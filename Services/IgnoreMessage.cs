@@ -13,10 +13,10 @@
 
         public required Plugin Plugin;
 
-        public IgnoreMessage(ILogger<IgnoreMessage> logger, PluginContext pluginContext)
+        public IgnoreMessage(ILogger<IgnoreMessage> logger, IPluginContext pluginContext)
         {
             this.Logger = logger;
-            this.PluginContext = pluginContext;
+            this.PluginContext = (pluginContext as PluginContext)!;
         }
 
         public void Initialize(bool hotReload)

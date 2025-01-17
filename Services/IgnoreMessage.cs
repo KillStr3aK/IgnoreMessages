@@ -26,15 +26,15 @@
         {
             this.Plugin = (this.PluginContext.Plugin as Plugin)!;
 
-            Plugin.HookUserMessage(124, OnMessagePrint, HookMode.Pre);
-            Plugin.HookUserMessage(323, OnHudMessage, HookMode.Pre);
+            this.Plugin.HookUserMessage(124, OnMessagePrint, HookMode.Pre);
+            this.Plugin.HookUserMessage(323, OnHudMessage, HookMode.Pre);
         }
 
         private HookResult OnHudMessage(UserMessage message)
         {
             var msg = message.ReadString("message");
 
-            if (msg.StartsWith("#") || msg.StartsWith("SFUI"))
+            if (msg.StartsWith("#"))
             {
                 if (this.Plugin.Config.IgnoredMessages.Contains(msg))
                 {
@@ -58,7 +58,7 @@
             {
                 var msg = message.ReadString("param", i);
 
-                if (msg.StartsWith("#") || msg.StartsWith("SFUI"))
+                if (msg.StartsWith("#"))
                 {
                     if (this.Plugin.Config.IgnoredMessages.Contains(msg))
                     {
@@ -77,8 +77,8 @@
 
         public void Release(bool hotReload)
         {
-            Plugin.UnhookUserMessage(124, OnMessagePrint, HookMode.Pre);
-            Plugin.UnhookUserMessage(323, OnMessagePrint, HookMode.Pre);
+            this.Plugin.UnhookUserMessage(124, OnMessagePrint, HookMode.Pre);
+            this.Plugin.UnhookUserMessage(323, OnMessagePrint, HookMode.Pre);
         }
     }
 }

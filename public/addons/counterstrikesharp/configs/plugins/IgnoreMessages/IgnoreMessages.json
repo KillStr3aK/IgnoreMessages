@@ -60,7 +60,11 @@
     "#Team_Cash_Award_Generic",
     "#Team_Cash_Award_Custom",
 
-    "#Cstrike_TitlesTXT_Game_teammate_attack"
+    "#Cstrike_TitlesTXT_Game_teammate_attack",
+    "#SFUI_Notice_Killed_Teammate",
+    "#SFUI_Notice_Hint_careful_around_teammates",
+    "#Cstrike_TitlesTXT_Hint_try_not_to_injure_teammates",
+    "#Cstrike_TitlesTXT_Hint_careful_around_teammates"
   ],
   "ConfigVersion": 2
 }

@@ -1,9 +1,12 @@
 ﻿namespace IgnoreMessages
 {
+    using CounterStrikeSharp.API;
     using CounterStrikeSharp.API.Core;
     using CounterStrikeSharp.API.Core.Plugin;
     using CounterStrikeSharp.API.Modules.Memory;
     using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
+    using CounterStrikeSharp.API.Modules.UserMessages;
+    using CounterStrikeSharp.API.Modules.Utils;
 
     public class IgnoreMessage
     {
@@ -23,42 +26,59 @@
         {
             this.Plugin = (this.PluginContext.Plugin as Plugin)!;
 
-            VirtualFunctions.ClientPrintFunc.Hook(this.OnPrintToChat, HookMode.Pre);
-            VirtualFunctions.ClientPrintAllFunc.Hook(this.OnPrintToChatAll, HookMode.Pre);
+            Plugin.HookUserMessage(124, OnMessagePrint, HookMode.Pre);
+            Plugin.HookUserMessage(323, OnHudMessage, HookMode.Pre);
         }
 
-        private HookResult InternalHandler(string message)
+        private HookResult OnHudMessage(UserMessage message)
         {
-            if (message.StartsWith("#"))
+            var msg = message.ReadString("message");
+
+            if (msg.StartsWith("#") || msg.StartsWith("SFUI"))
             {
-                if (this.Plugin.Config.IgnoredMessages.Contains(message))
+                if (this.Plugin.Config.IgnoredMessages.Contains(msg))
                 {
                     return HookResult.Stop;
                 }
 
                 if (this.Plugin.Config.PrintKeyNames)
                 {
-                    this.Logger.LogInformation("Current message key: \"{0}\"", message.Replace(Environment.NewLine, string.Empty));
+                    this.Logger.LogInformation("Current message key: \"{0}\"", msg.Replace(Environment.NewLine, string.Empty));
                 }
             }
 
             return HookResult.Continue;
         }
 
-        private HookResult OnPrintToChat(DynamicHook hook)
+        private HookResult OnMessagePrint(UserMessage message)
         {
-            return this.InternalHandler(hook.GetParam<string>(2));
-        }
+            var count = message.GetRepeatedFieldCount("param");
 
-        private HookResult OnPrintToChatAll(DynamicHook hook)
-        {
-            return this.InternalHandler(hook.GetParam<string>(1));
+            for(int i = 0; i < count; i++)
+            {
+                var msg = message.ReadString("param", i);
+
+                if (msg.StartsWith("#") || msg.StartsWith("SFUI"))
+                {
+                    if (this.Plugin.Config.IgnoredMessages.Contains(msg))
+                    {
+                        return HookResult.Stop;
+                    }
+
+                    if (this.Plugin.Config.PrintKeyNames)
+                    {
+                        this.Logger.LogInformation("Current message key: \"{0}\"", msg.Replace(Environment.NewLine, string.Empty));
+                    }
+                }
+            }
+
+            return HookResult.Continue;
         }
 
         public void Release(bool hotReload)
         {
-            VirtualFunctions.ClientPrintFunc.Unhook(this.OnPrintToChat, HookMode.Pre);
-            VirtualFunctions.ClientPrintAllFunc.Unhook(this.OnPrintToChatAll, HookMode.Pre);
+            Plugin.UnhookUserMessage(124, OnMessagePrint, HookMode.Pre);
+            Plugin.UnhookUserMessage(323, OnMessagePrint, HookMode.Pre);
         }
     }
 }

@@ -78,7 +78,7 @@
         public void Release(bool hotReload)
         {
             this.Plugin.UnhookUserMessage(124, OnMessagePrint, HookMode.Pre);
-            this.Plugin.UnhookUserMessage(323, OnMessagePrint, HookMode.Pre);
+            this.Plugin.UnhookUserMessage(323, OnHudMessage, HookMode.Pre);
         }
     }
 }

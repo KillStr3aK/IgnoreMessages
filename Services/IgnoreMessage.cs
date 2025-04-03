@@ -1,12 +1,8 @@
 ﻿namespace IgnoreMessages
 {
-    using CounterStrikeSharp.API;
     using CounterStrikeSharp.API.Core;
     using CounterStrikeSharp.API.Core.Plugin;
-    using CounterStrikeSharp.API.Modules.Memory;
-    using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
     using CounterStrikeSharp.API.Modules.UserMessages;
-    using CounterStrikeSharp.API.Modules.Utils;
 
     public class IgnoreMessage
     {
@@ -32,7 +28,7 @@
 
         private HookResult OnHudMessage(UserMessage message)
         {
-            var msg = message.ReadString("message");
+            string msg = message.ReadString("message");
 
             if (msg.StartsWith("#"))
             {
@@ -52,11 +48,11 @@
 
         private HookResult OnMessagePrint(UserMessage message)
         {
-            var count = message.GetRepeatedFieldCount("param");
+            int count = message.GetRepeatedFieldCount("param");
 
             for(int i = 0; i < count; i++)
             {
-                var msg = message.ReadString("param", i);
+                string msg = message.ReadString("param", i);
 
                 if (msg.StartsWith("#"))
                 {

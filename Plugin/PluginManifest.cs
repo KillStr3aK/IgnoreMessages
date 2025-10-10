@@ -10,7 +10,7 @@
 
         public override string ModuleAuthor => "Nexd @ Eternar (https://eternar.dev)";
 
-        public override string ModuleVersion => "1.0.4 " +
+        public override string ModuleVersion => "1.0.5 " +
 #if RELEASE
             "(release)";
 #else

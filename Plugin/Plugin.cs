@@ -3,7 +3,7 @@
     using CounterStrikeSharp.API.Core;
     using CounterStrikeSharp.API.Core.Attributes;
 
-    [MinimumApiVersion(315)]
+    [MinimumApiVersion(340)]
     public sealed partial class Plugin : BasePlugin, IPluginConfig<PluginConfig>
     {
         public required PluginConfig Config { get; set; } = new PluginConfig();
